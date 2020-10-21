@@ -24,16 +24,16 @@ describe("state controlled input field", () => {
 
   test("state updates with value of input box upon change", () => {
     const inputBox = findByTestAttr(wrapper, "input-box");
-    const mockEvent = { target: { value: "train" } };
+    const mockEvent = { target: { value: "test" } };
 
     inputBox.simulate("change", mockEvent);
-    expect(mockSetCurrentGuess).toHaveBeenCalledWith("train");
+    expect(mockSetCurrentGuess).toHaveBeenCalledWith("test");
   });
 
   test("field is cleared up submit button click", () => {
     const submitBtn = findByTestAttr(wrapper, "submit-button");
 
-    submitBtn.simulate("click");
+    submitBtn.simulate("click", { preventDefault() {} });
     expect(mockSetCurrentGuess).toHaveBeenCalledWith("");
   });
 });

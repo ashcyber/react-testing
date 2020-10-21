@@ -1,6 +1,6 @@
 import React from "react";
 
-function Input(props) {
+function Input({ secretWord }) {
   const [currentGuess, setCurrentGuess] = React.useState("");
 
   return (
@@ -16,7 +16,8 @@ function Input(props) {
         <button
           data-test="submit-button"
           className="btn btn-primary mb-2"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             setCurrentGuess("");
           }}
         >

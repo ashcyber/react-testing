@@ -36,7 +36,6 @@ describe("test fetch users", () => {
     const { users } = sagaTester.getState();
     expect(users.items).toBeTruthy();
     expect(users.errorMessage).toBeFalsy();
-    sagaTester.reset(true);
   });
 
   test("error should be caught if invalid user is removed", async () => {

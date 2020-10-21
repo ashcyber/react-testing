@@ -10,6 +10,13 @@ const initialState = {
   },
 };
 
+const waitForAllUsers = (tester) => {
+  return Promise.race([
+    tester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
+    tester.waitFor(actions.Types.USERS_ERROR, true),
+  ]);
+};
+
 describe("test fetch users", () => {
   test("get users should get a list of users array", async () => {
     const sagaTester = new SagaTester({
@@ -20,10 +27,7 @@ describe("test fetch users", () => {
     sagaTester.start(rootSaga);
 
     sagaTester.dispatch(actions.getUsersRequest());
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS),
-      sagaTester.waitFor(actions.Types.USERS_ERROR),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const { users } = sagaTester.getState();
     expect(users.items).toBeTruthy();
@@ -44,17 +48,11 @@ describe("test delete Users", () => {
 
     sagaTester.dispatch(actions.getUsersRequest());
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     sagaTester.dispatch(actions.deleteUserRequest("123"));
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const {
       users: { errorMessage },
@@ -76,19 +74,13 @@ describe("test delete Users", () => {
       actions.createUserRequest({ firstName: "test", lastName: "tester" })
     );
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const [{ _id }] = sagaTester.getState().users.items;
 
     sagaTester.dispatch(actions.deleteUserRequest(_id));
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const afterDeleteItems = sagaTester.getState().users.items;
 
@@ -107,10 +99,7 @@ describe("test user creation", () => {
 
     sagaTester.dispatch(actions.getUsersRequest());
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const beforeCreateLength = sagaTester.getState().users.items.length;
 
@@ -118,10 +107,7 @@ describe("test user creation", () => {
       actions.createUserRequest({ firstName: "test", lastName: "tester" })
     );
 
-    await Promise.race([
-      sagaTester.waitFor(actions.Types.GET_USERS_SUCCESS, true),
-      sagaTester.waitFor(actions.Types.USERS_ERROR, true),
-    ]);
+    await waitForAllUsers(sagaTester);
 
     const currentState = sagaTester.getState();
     const afterCreateLength = currentState.users.items.length;

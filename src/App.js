@@ -1,8 +1,8 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import SagaTesting from "./pages/saga-testing";
 import SimpleCounter from "./pages/simple-counter";
-import { BrowserRouter as Router } from "react-router-dom";
+import LuckyWordGuesser from "./pages/lucky-word-guesser";
 
 function App() {
   return (
@@ -10,6 +10,11 @@ function App() {
       <Switch>
         <Route path="/" exact={true} component={SagaTesting} />
         <Route path="/simple-counter" exact={true} component={SimpleCounter} />
+        <Route
+          path="/lucky-word-guesser"
+          exact={true}
+          component={LuckyWordGuesser}
+        />
       </Switch>
     </Router>
   );
